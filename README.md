@@ -1,8 +1,42 @@
-# Backend App Template
-This is template information page. If you are looking for startup page - check [START.md](START.md)
+# Book Store
 
-## New project checklist
-* [ ] Update `package.json`, `pnpm-lock.yaml` to change project name, etc.
-* [ ] Update `docker-compose.yml`, `docker-compose-dev.yml` to change project name, etc.
-* [ ] Update `START.md`
-* [ ] Delete `README.md` and rename `START.md` to `README.md`
+Backend for book store
+
+## Requirements
+* NodeJS >= v22.10.0
+* npm (package manager)
+* Docker with docker-compose (for production only)
+
+## Run application
+
+### For development
+1. Install dependencies
+    ```shell
+    npm install
+    ```
+2. Provide environments.
+You can just copy content from `env/examples/app.env.example` to `env/run/app.env`
+3. Run migrations
+   ```shell
+   npm run app-database:migrations:sync
+   ```
+4. Start application
+    ```shell
+    npm run start:dev
+    ```
+Open documentation to make sure that web server started
+http://localhost:4000/docs.
+
+### For production
+1. Provide environments.
+   You can just copy content from `env/examples/app.env.example` to `env/run/app.env`
+2. Start app with services
+    ```shell
+    npm run compose:up
+    ```
+3. Open shell in docker container and run migrations
+   ```shell
+   docker exec -it <container_id> bash
+   cd app
+   npm run app-database:migrations:sync
+   ```

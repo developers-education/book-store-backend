@@ -3,7 +3,6 @@ import 'zod-openapi/extend';
 import './common/base-path';
 import { IAppDatabase } from '@/infrastructure/database/types/database.types';
 import { IWebServer } from '@/lib/web-server/types/web-server.interface';
-import { IScheduler } from '@/lib/scheduler/types/scheduler.interface';
 import { IControllerInitializer } from '@/infrastructure/web-server/types/controller-initializer.interface';
 import { rootModule } from '@/root.module';
 import { Router } from 'h3';
@@ -16,7 +15,6 @@ const apiControllerInitializer = rootModule.resolve<IControllerInitializer>(
 );
 const webServer = rootModule.resolve<IWebServer>('webServer');
 const db = rootModule.resolve<IAppDatabase>('db');
-const scheduler = rootModule.resolve<IScheduler>('scheduler');
 const openApiBuilder = rootModule.resolve<IOpenApiBuilder>('openApiBuilder');
 const apiRouter = rootModule.resolve<Router>('apiRouter');
 
@@ -27,7 +25,6 @@ apiControllerInitializer.init(usersController, apiRouter, openApiBuilder);
 apiControllerInitializer.init(exampleController, apiRouter, openApiBuilder);
 
 webServer.start();
-scheduler.start();
 
 const shutdown = () => {
   Promise.allSettled([webServer.stop(), db.destroy()]).finally(() => process.exit(0));
