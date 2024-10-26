@@ -1,11 +1,11 @@
-# Book Store
+# Book Store Backend
 
-Backend for book store
+Backend for book store application
 
 ## Requirements
-* NodeJS >= v22.10.0
+* NodeJS >= v22.x.x
 * npm (package manager)
-* Docker with docker-compose (for production only)
+* Docker with docker-compose (for production)
 
 ## Run application
 
@@ -15,7 +15,7 @@ Backend for book store
     npm install
     ```
 2. Provide environments.
-You can just copy content from `env/examples/app.env.example` to `env/run/app.env`
+   You can just copy content from `env/examples/app.env.example` to `env/run/app.env`
 3. Run migrations
    ```shell
    npm run app-database:migrations:sync
@@ -26,6 +26,7 @@ You can just copy content from `env/examples/app.env.example` to `env/run/app.en
     ```
 Open documentation to make sure that web server started
 http://localhost:4000/docs.
+
 
 ### For production
 1. Provide environments.

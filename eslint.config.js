@@ -8,6 +8,7 @@ export default [
   ...tseslint.configs.recommended,
   eslintPluginPrettierRecommended,
   {
+    files: ['**/*.ts'],
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unsafe-declaration-merging': 'off',

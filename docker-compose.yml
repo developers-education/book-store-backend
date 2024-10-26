@@ -4,9 +4,7 @@ services:
   book-store-backend:
     tty: true
     build: app
-    depends_on:
-      - app-database
     env_file:
       - env/run/app.env
     ports:
-      - '4000:4000'
+      - "4000:4000"
