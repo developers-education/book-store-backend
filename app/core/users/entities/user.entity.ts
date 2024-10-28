@@ -1,10 +1,10 @@
 import { uuidv7 } from 'uuidv7';
 
 export class User {
-  id: string;
-  login: string;
-  passwordHash: string;
-  salt: string;
+  public id: string;
+  public login: string;
+  public passwordHash: string;
+  public salt: string;
 
   constructor(data: UserParams) {
     this.id = data.id ?? uuidv7();
@@ -16,11 +16,27 @@ export class User {
   public isCorrectPasswordHash(hash: string): boolean {
     return hash === this.passwordHash;
   }
+
+  public toPlain(): UserPlain {
+    return {
+      id: this.id,
+      login: this.login,
+      passwordHash: this.passwordHash,
+      salt: this.salt,
+    };
+  }
 }
 
-export interface UserParams {
+export type UserParams = {
   id?: string;
   login: string;
   passwordHash: string;
   salt: string;
-}
+};
+
+export type UserPlain = {
+  id: string;
+  login: string;
+  passwordHash: string;
+  salt: string;
+};
