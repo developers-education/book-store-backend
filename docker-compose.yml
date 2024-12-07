@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  app:
+    tty: true
+    build: app
+    env_file:
+      - env/run/app.env
+    ports:
+      - "4000:4000"
+    networks:
+      - app-network
+
+networks:
+  app-network:
