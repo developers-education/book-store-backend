@@ -2,9 +2,13 @@ import { IBooksRepository } from '@/core/books/types/books-repository.interface'
 import { IGetRecommendedBooksCase } from '@/core/books/types/get-recommended-books-case.interface';
 import { BookPlain } from '@/core/books/entities/book.entity';
 import { getRandomInt } from '@/utils';
+import { inject } from 'di-wise';
+import { booksModuleTokens } from '@/core/books/books.module';
 
 export class GetRecommendedBooksCase implements IGetRecommendedBooksCase {
-  constructor(private readonly booksRepository: IBooksRepository) {}
+  constructor(
+    private readonly booksRepository: IBooksRepository = inject(booksModuleTokens.booksRepository),
+  ) {}
 
   public async execute(booksLimit: number): Promise<BookPlain[]> {
     const bookIds = await this.booksRepository.getBooksIds();

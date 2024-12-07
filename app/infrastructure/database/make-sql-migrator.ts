@@ -1,3 +1,4 @@
+import '@/common/base-path';
 import path from 'node:path';
 import { MigrationsCore } from 'sql-migrations-core';
 import { ISqlMigrator } from '@/lib/migrator/types/sql-migrator.interface';
@@ -8,7 +9,7 @@ import { databaseModuleTokens } from '@/infrastructure/database/database.module'
 
 export function makeSqlMigrator(db: IAppDatabase = inject(databaseModuleTokens.db)): ISqlMigrator {
   return MigrationsCore.create({
-    path: path.join(basePath, 'migrations'),
+    path: path.join(basePath, 'migrations/db'),
     sqlActions: new SqlActions(db),
   });
 }

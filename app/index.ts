@@ -25,8 +25,10 @@ const openApiBuilder: IOpenApiBuilder = webServerModule.resolve(
 const apiRouter: Router = webServerModule.resolve(webServerModuleTokens.apiRouter);
 
 const usersController: Controller = webApiModule.resolve(webApiModuleTokens.usersController);
+const booksController: Controller = webApiModule.resolve(webApiModuleTokens.booksController);
 
 apiControllerInitializer.init(usersController, apiRouter, openApiBuilder);
+apiControllerInitializer.init(booksController, apiRouter, openApiBuilder);
 
 webServer.start();
 

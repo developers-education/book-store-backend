@@ -3,9 +3,13 @@ import {
   IGetPaginatedBooksBySectionCase,
   PaginatedBooksResult,
 } from '@/core/books/types/get-paginated-books-by-section-case.interface';
+import { inject } from 'di-wise';
+import { booksModuleTokens } from '@/core/books/books.module';
 
 export class GetPaginatedBooksBySectionCase implements IGetPaginatedBooksBySectionCase {
-  constructor(private readonly booksRepository: IBooksRepository) {}
+  constructor(
+    private readonly booksRepository: IBooksRepository = inject(booksModuleTokens.booksRepository),
+  ) {}
 
   public async execute(
     sectionId: string,

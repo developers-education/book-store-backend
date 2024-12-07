@@ -23,8 +23,8 @@ export class SqlActions implements MigrationActions {
   async migrateDown(migrations: Migration[]): Promise<void> {
     await this.db.transaction().execute(async (trx) => {
       for (const migration of migrations) {
-        await trx.deleteFrom('__migration').where('name', '=', migration.name).execute();
         await sql.raw(migration.sql).execute(trx);
+        await trx.deleteFrom('__migration').where('name', '=', migration.name).execute();
       }
     });
   }
@@ -32,8 +32,8 @@ export class SqlActions implements MigrationActions {
   async migrateUp(migrations: Migration[]): Promise<void> {
     await this.db.transaction().execute(async (trx) => {
       for (const migration of migrations) {
-        await trx.insertInto('__migration').values({ name: migration.name }).execute();
         await sql.raw(migration.sql).execute(trx);
+        await trx.insertInto('__migration').values({ name: migration.name }).execute();
       }
     });
   }

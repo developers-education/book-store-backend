@@ -66,15 +66,18 @@ export class Logger implements ILogger {
     this.pinoLogger.warn(data, this.prepareMessage(message));
   }
 
-  public error(error: Error, message: string, data: Record<string, any> = {}): void {
+  public error(error: Error, message?: string, data: Record<string, any> = {}): void {
     this.pinoLogger.error(
       { ...data, error: this.getPlainError(error) },
-      this.prepareMessage(message),
+      message ? this.prepareMessage(message) : '',
     );
   }
 
-  public fatal(error: Error, message: string, data: Record<string, any> = {}): void {
-    this.pinoLogger.fatal({ ...data, error }, this.prepareMessage(message));
+  public fatal(error: Error, message?: string, data: Record<string, any> = {}): void {
+    this.pinoLogger.fatal(
+      { ...data, error: this.getPlainError(error) },
+      message ? this.prepareMessage(message) : '',
+    );
   }
 
   private prepareMessage(message: string): string {

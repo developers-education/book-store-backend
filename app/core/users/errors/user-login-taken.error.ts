@@ -17,7 +17,3 @@ type LoginTakenParams = {
 export const LoginTakenError = defineError2<LoginTakenParams>('LOGIN_TAKEN', {
   login: z.string(),
 });
-
-// ============
-LoginTakenError.schema.parse({});
-throw new LoginTakenError({ login: 'a' });

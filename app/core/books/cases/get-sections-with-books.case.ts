@@ -5,9 +5,13 @@ import {
 } from '@/core/books/types/get-sections-with-books-case.interface';
 import { Book } from '@/core/books/entities/book.entity';
 import { Section } from '@/core/books/entities/section.entity';
+import { inject } from 'di-wise';
+import { booksModuleTokens } from '@/core/books/books.module';
 
 export class GetSectionsWithBooksCase implements IGetSectionsWithBooksCase {
-  constructor(private readonly booksRepository: IBooksRepository) {}
+  constructor(
+    private readonly booksRepository: IBooksRepository = inject(booksModuleTokens.booksRepository),
+  ) {}
 
   public async execute(booksLimit: number): Promise<SectionWithBook[]> {
     const sectionsWithBooks = await this.booksRepository.getSectionsWithBooks(booksLimit);

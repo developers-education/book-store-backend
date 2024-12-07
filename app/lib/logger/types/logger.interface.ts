@@ -34,12 +34,12 @@ export interface ILogger {
    * Used to capture errors. After error function can't continue it's work
    * @example logger.error(error, 'Failed to create new user.');
    */
-  error(error: Error, message: string, data?: Record<string, any>): void;
+  error(error: Error, message?: string, data?: Record<string, any>): void;
   /**
    * Used to capture fatal errors that shutdowns application (or it's part)
    * @example logger.fatal(error, 'Application is out of free disk space.');
    */
-  fatal(error: Error, message: string, data?: Record<string, any>): void;
+  fatal(error: Error, message?: string, data?: Record<string, any>): void;
 }
 
 export type LoggerOptions = {

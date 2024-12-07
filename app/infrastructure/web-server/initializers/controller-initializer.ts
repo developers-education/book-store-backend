@@ -33,7 +33,7 @@ export class ControllerInitializer implements IControllerInitializer {
     }
 
     controllerDef.handlers.forEach((handlerDef) => {
-      this.addToRouter(router, controllerDef, handlerDef);
+      this.addToRouter(router, controller, controllerDef, handlerDef);
 
       if (openApiBuilder) {
         this.addToOpenApi(openApiBuilder, controllerDef, handlerDef);
@@ -41,11 +41,16 @@ export class ControllerInitializer implements IControllerInitializer {
     });
   }
 
-  private addToRouter(router: Router, controllerDef: ControllerDef, handlerDef: HandlerDef): void {
+  private addToRouter(
+    router: Router,
+    controller: Controller,
+    controllerDef: ControllerDef,
+    handlerDef: HandlerDef,
+  ): void {
     const method = this.getMethod(handlerDef);
     const fullPath = this.getFullPath(controllerDef, handlerDef);
     const fullChain = [...controllerDef.chain, ...handlerDef.chain];
-    const boundHandler = handlerDef.handler.bind(controllerDef.controller);
+    const boundHandler = handlerDef.handler.bind(controller);
     const handler = this.withErrorHandler(this.withChain(boundHandler, fullChain));
 
     router.add(fullPath, defineEventHandler(handler), method);
@@ -58,7 +63,7 @@ export class ControllerInitializer implements IControllerInitializer {
   ): void {
     const method = this.getMethod(handlerDef);
     if (method === 'connect') return;
-    const fullPath = this.getFullPath(controllerDef, handlerDef);
+    const fullPath = this.getFullOpenApiPath(controllerDef, handlerDef);
 
     openApiBuilder.addPath(method, fullPath, {
       responses: [...controllerDef.responses, ...handlerDef.responses],
@@ -79,6 +84,11 @@ export class ControllerInitializer implements IControllerInitializer {
     return (controllerDef.prefix ?? '') + (handlerDef.path ?? '');
   }
 
+  private getFullOpenApiPath(controllerDef: ControllerDef, handlerDef: HandlerDef): string {
+    const fullPath = (controllerDef.prefix ?? '') + (handlerDef.path ?? '');
+    return fullPath.replace(/:(\w+)/g, '{$1}');
+  }
+
   private withChain(handler: HandlerFunc, chain: IChainHandler[]): HandlerFunc {
     let lastFunc = handler;
     for (const chainHandler of chain.reverse()) {
@@ -94,6 +104,9 @@ export class ControllerInitializer implements IControllerInitializer {
       try {
         return await handler(event);
       } catch (error: unknown) {
+        if (error instanceof Error) {
+          this.logger.error(error);
+        }
         throw normalizeApiError(error);
       }
     };

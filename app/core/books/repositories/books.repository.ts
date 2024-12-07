@@ -80,17 +80,17 @@ export class BooksRepository implements IBooksRepository {
   public async getBookWithReviews(bookId: string): Promise<BookWithReviews | null> {
     const result = await this.db
       .selectFrom('book')
-      .where('id', '=', bookId)
+      .where('book.id', '=', bookId)
       .innerJoin('review', 'review.bookId', 'book.id')
       .selectAll(['book', 'review'])
-      .select(['book.id as id', 'review.id as reviewId'])
+      .select(['book.id as bookId', 'review.id as reviewId'])
       .execute();
 
     if (result.length === 0) {
       return null;
     }
 
-    const book = new Book(result[0]);
+    const book = new Book({ ...result[0], id: result[0].bookId });
     const reviews: Review[] = result.map(
       (data) =>
         new Review({

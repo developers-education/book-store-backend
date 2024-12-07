@@ -16,8 +16,8 @@ export class OpenApiBuilder implements IOpenApiBuilder {
   private readonly spec: ZodOpenApiObject = {
     openapi: '3.1.0',
     info: {
-      title: 'Title',
-      description: 'Description',
+      title: 'Book store',
+      description: 'API for book store',
       version: '',
     },
     paths: {},
@@ -100,7 +100,7 @@ export class OpenApiBuilder implements IOpenApiBuilder {
       contentTypeObj.schema = responseSpec.schema;
     } else {
       if (responseSpec.schema) {
-        (contentTypeObj.schema as ZodType).or(responseSpec.schema);
+        contentTypeObj.schema = (contentTypeObj.schema as ZodType).or(responseSpec.schema);
       }
     }
   }
@@ -122,7 +122,7 @@ export class OpenApiBuilder implements IOpenApiBuilder {
       contentTypeObj.schema = bodySpec.schema;
     } else {
       if (bodySpec.schema) {
-        (contentTypeObj.schema as ZodType).or(bodySpec.schema);
+        contentTypeObj.schema = (contentTypeObj.schema as ZodType).or(bodySpec.schema);
       }
     }
   }
@@ -135,7 +135,7 @@ export class OpenApiBuilder implements IOpenApiBuilder {
     if (!methodObj.requestParams[type]) {
       methodObj.requestParams[type] = schema;
     } else {
-      (methodObj.requestParams[type] as ZodType).or(schema);
+      methodObj.requestParams[type] = (methodObj.requestParams[type] as ZodType).or(schema);
     }
   }
 
