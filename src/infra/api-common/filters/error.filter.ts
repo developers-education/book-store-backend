@@ -4,7 +4,7 @@ import { AppError } from '@/shared/errors/app-error';
 import { ZodError } from 'zod';
 import { HttpError, UnknownError, ValidationError } from '@/shared/errors/common-errors';
 import { ILogger } from '@/lib/logger/types/logger.interface';
-import { normalizeError } from '@/shared/errors/normalize-error';
+import { normalizeError } from '@/shared/utils/errors';
 import { COMMON_DI_CONSTANTS } from '@/infra/common/common.di-constants';
 
 @Catch()

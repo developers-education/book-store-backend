@@ -1,13 +1,41 @@
-# NestJS Backend Template (Simplified)
-This is template information page. If you are looking for startup page - check [START.md](START.md)
+# Book Store Backend
 
-Original repo: https://github.com/siranweb/nest-backend-template
+Backend for book store
 
-Differences:
-- `postgres` was switched to `sqlite`
-- No need to run docker locally
+## Requirements
+* NodeJS >= v20.10.0
+* Npm
 
-## New project checklist
-* [ ] Update `package.json`, `package-lock.json` to change project name, etc.
-* [ ] Update `START.md`
-* [ ] Delete `README.md` and rename `START.md` to `README.md`
+## Run application
+
+### For development
+1. Install dependencies
+    ```shell
+    npm install
+    ```
+2. Provide environment variables to `env/run` (you can copy content from `env/example`):
+    * `env/run/app.env`
+3. Run migrations
+   ```shell
+   npm run migrations:sync
+   ```
+4. Start application itself
+    ```shell
+    npm run start
+    # or
+    npm run start:dev
+    ```
+
+### For production
+1. Provide environment variables to `env/run` (if needed):
+    * `env/run/app.env`
+2. Start app with services
+    ```shell
+    npm run compose:up
+    ```
+3. Open shell in docker container and run migrations
+   ```shell
+   docker exec -it <container_id> bash
+   cd app
+   npm run migrations:sync
+   ```

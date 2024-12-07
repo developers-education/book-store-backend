@@ -1,8 +1,8 @@
 {
-  "name": "nest-backend-template-simplified",
+  "name": "book-store-backend",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Book store backend",
+  "author": "siran <siranweb.public@tuta.io>",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
