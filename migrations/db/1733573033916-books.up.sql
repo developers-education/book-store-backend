@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS book (
     name TEXT NOT NULL,
     author TEXT NOT NULL,
     description TEXT,
-    image_url TEXT,
+    image_path TEXT,
     price REAL NOT NULL,
     discount_price REAL,
     section_id TEXT,

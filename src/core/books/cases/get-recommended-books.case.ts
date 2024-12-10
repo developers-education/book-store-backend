@@ -6,7 +6,6 @@ import { BOOKS_DI_CONSTANTS } from '@/core/books/books.di-constants';
 import { getRandomInt } from '@/shared/utils/random';
 import { COMMON_DI_CONSTANTS } from '@/infra/common/common.di-constants';
 import { ILogger } from '@/lib/logger/types/logger.interface';
-import { toInternalError } from '@/shared/utils/errors';
 
 @Injectable()
 export class GetRecommendedBooksCase implements IGetRecommendedBooksCase {
@@ -25,7 +24,7 @@ export class GetRecommendedBooksCase implements IGetRecommendedBooksCase {
     const bookIds = await this.booksRepository.getBooksIds();
     const bookIdsToGet = this.getBookIdsToProceed(bookIds, booksLimit);
 
-    const books = await this.booksRepository.getBooksByIds(bookIdsToGet).catch(toInternalError);
+    const books = await this.booksRepository.getBooksByIds(bookIdsToGet);
 
     const plainBooks: TBookPlain[] = books.map((book) => book.toPlain());
 

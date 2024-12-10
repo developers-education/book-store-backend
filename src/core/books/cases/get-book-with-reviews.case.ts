@@ -8,7 +8,6 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BOOKS_DI_CONSTANTS } from '@/core/books/books.di-constants';
 import { COMMON_DI_CONSTANTS } from '@/infra/common/common.di-constants';
 import { ILogger } from '@/lib/logger/types/logger.interface';
-import { toInternalError } from '@/shared/utils/errors';
 
 @Injectable()
 export class GetBookWithReviewsCase implements IGetBookWithReviewsCase {
@@ -24,9 +23,7 @@ export class GetBookWithReviewsCase implements IGetBookWithReviewsCase {
   public async execute(bookId: string): Promise<TBookWithReviews> {
     this.logger.info('Starting getting book with reviews.', { bookId });
 
-    const bookWithReviews = await this.booksRepository
-      .getBookWithReviews(bookId)
-      .catch(toInternalError);
+    const bookWithReviews = await this.booksRepository.getBookWithReviews(bookId);
 
     if (!bookWithReviews) {
       throw new BookNotFoundError();

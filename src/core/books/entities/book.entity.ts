@@ -6,7 +6,7 @@ export class Book {
   public name: string;
   public author: string;
   public description: string;
-  public imageUrl: string;
+  public imagePath: string;
   private _price!: number;
   private _discountPrice!: number | null;
 
@@ -15,7 +15,7 @@ export class Book {
     this.name = data.name;
     this.author = data.author;
     this.description = data.description;
-    this.imageUrl = data.imageUrl;
+    this.imagePath = data.imagePath;
     this.price = data.price;
     this.discountPrice = data.discountPrice ?? null;
   }
@@ -49,7 +49,7 @@ export class Book {
       name: this.name,
       author: this.author,
       description: this.description,
-      imageUrl: this.imageUrl,
+      imagePath: this.imagePath,
       price: this.price,
       discountPrice: this.discountPrice,
     };
@@ -61,7 +61,7 @@ export type BookParams = {
   name: string;
   author: string;
   description: string;
-  imageUrl: string;
+  imagePath: string;
   price: number;
   discountPrice?: number | null;
 };
@@ -71,7 +71,7 @@ export type TBookPlain = {
   name: string;
   author: string;
   description: string;
-  imageUrl: string;
+  imagePath: string;
   price: number;
   discountPrice: number | null;
 };

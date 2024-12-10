@@ -5,7 +5,7 @@ export type TBookTable = TTableBase & {
   name: string;
   author: string;
   description: string;
-  imageUrl: string;
+  imagePath: string;
   price: number;
   discountPrice: number | null;
 };

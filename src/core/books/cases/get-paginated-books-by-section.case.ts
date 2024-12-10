@@ -7,7 +7,6 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BOOKS_DI_CONSTANTS } from '@/core/books/books.di-constants';
 import { COMMON_DI_CONSTANTS } from '@/infra/common/common.di-constants';
 import { ILogger } from '@/lib/logger/types/logger.interface';
-import { toInternalError } from '@/shared/utils/errors';
 
 @Injectable()
 export class GetPaginatedBooksBySectionCase implements IGetPaginatedBooksBySectionCase {
@@ -32,9 +31,7 @@ export class GetPaginatedBooksBySectionCase implements IGetPaginatedBooksBySecti
     const offset = (page - 1) * limit;
     const totalPages = Math.ceil(bookIds.length / limit);
 
-    const books = await this.booksRepository
-      .getBooksBySection(sectionId, { limit, offset })
-      .catch(toInternalError);
+    const books = await this.booksRepository.getBooksBySection(sectionId, { limit, offset });
 
     const result: TPaginatedBooksResult = {
       books: books.map((book) => book.toPlain()),
