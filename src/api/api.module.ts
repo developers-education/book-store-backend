@@ -5,9 +5,16 @@ import { UsersModule } from '@/core/users/users.module';
 import { BooksController } from '@/api/books/books.controller';
 import { BooksModule } from '@/core/books/books.module';
 import { SectionsController } from '@/api/books/sections.controller';
+import { OrdersController } from '@/api/orders/orders.controller';
 
 @Module({
   imports: [UsersModule, BooksModule],
-  controllers: [UsersController, SessionsController, BooksController, SectionsController],
+  controllers: [
+    UsersController,
+    SessionsController,
+    BooksController,
+    SectionsController,
+    OrdersController,
+  ],
 })
 export class ApiModule {}

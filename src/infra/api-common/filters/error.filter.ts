@@ -29,6 +29,9 @@ export class ErrorFilter implements ExceptionFilter {
     if (error instanceof HttpException) {
       specificError = new HttpError();
       status = error.getStatus();
+    } else if (error instanceof UnknownError) {
+      specificError = error;
+      status = 500;
     } else if (error instanceof AppError) {
       specificError = error;
       status = 400;

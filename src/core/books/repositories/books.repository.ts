@@ -121,4 +121,27 @@ export class BooksRepository implements IBooksRepository {
       };
     });
   }
+
+  public async createReview(bookId: string, userId: string, review: Review): Promise<void> {
+    return withInternalError(async () => {
+      await this.db
+        .insertInto('review')
+        .values({ bookId, userId, ...review.toPlain() })
+        .returningAll()
+        .executeTakeFirst();
+    });
+  }
+
+  public async getReview(bookId: string, userId: string): Promise<Review | null> {
+    return withInternalError(async () => {
+      const record = await this.db
+        .selectFrom('review')
+        .selectAll()
+        .where('userId', '=', userId)
+        .where('bookId', '=', bookId)
+        .executeTakeFirst();
+
+      return record ? new Review(record) : null;
+    });
+  }
 }

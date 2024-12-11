@@ -9,6 +9,8 @@ export interface IBooksRepository {
   getSectionsWithBooks(limitBooks?: number): Promise<TSectionsWithBooks>;
   getBookWithReviews(bookId: string): Promise<TBookWithReviews | null>;
   getBook(bookId: string): Promise<Book | null>;
+  createReview(bookId: string, userId: string, review: Review): Promise<void>;
+  getReview(bookId: string, userId: string): Promise<Review | null>;
 }
 
 export type TGetBooksOptions = {

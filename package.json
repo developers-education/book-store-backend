@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "start": "dotenvx run -f env/run/app.env -- nest start",
-    "start:dev": "dotenvx run -f env/run/app.env -- nest start --watch",
+    "start:dev": "dotenvx run -f env/run/app.env -- nest start --watch --trace-warnings",
     "start:dist": "node dist/main",
     "start:dist:env": "dotenvx run -f env/run/app.env -- node dist/main",
     "build": "nest build",

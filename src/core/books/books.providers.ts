@@ -10,6 +10,8 @@ import { GetRecommendedBooksCase } from '@/core/books/cases/get-recommended-book
 import { IGetRecommendedBooksCase } from '@/core/books/types/get-recommended-books-case.interface';
 import { GetSectionsWithBooksCase } from '@/core/books/cases/get-sections-with-books.case';
 import { IGetSectionsWithBooksCase } from '@/core/books/types/get-sections-with-books-case.interface';
+import { CreateReviewCase } from '@/core/books/cases/create-review.case';
+import { ICreateReviewCase } from '@/core/books/types/create-review-case.interface';
 
 export const publicProviders: Provider[] = [
   {
@@ -28,6 +30,10 @@ export const publicProviders: Provider[] = [
     useClass: GetSectionsWithBooksCase,
     provide: BOOKS_DI_CONSTANTS.GET_SECTIONS_WITH_BOOKS_CASE,
   } satisfies Provider<IGetSectionsWithBooksCase>,
+  {
+    useClass: CreateReviewCase,
+    provide: BOOKS_DI_CONSTANTS.CREATE_REVIEW_CASE,
+  } satisfies Provider<ICreateReviewCase>,
 ];
 
 export const providers: Provider[] = [
