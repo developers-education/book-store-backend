@@ -17,7 +17,8 @@
     "migrations:create": "dotenvx run -f env/run/app.env -- ts-node -r tsconfig-paths/register scripts/migrations/create.ts",
     "migrations:sync": "dotenvx run -f env/run/app.env -- ts-node -r tsconfig-paths/register scripts/migrations/sync.ts",
     "migrations:up": "dotenvx run -f env/run/app.env -- ts-node -r tsconfig-paths/register scripts/migrations/up.ts",
-    "migrations:down": "dotenvx run -f env/run/app.env -- ts-node -r tsconfig-paths/register scripts/migrations/down.ts"
+    "migrations:down": "dotenvx run -f env/run/app.env -- ts-node -r tsconfig-paths/register scripts/migrations/down.ts",
+    "seeds:books": "dotenvx run -f env/run/app.env -- ts-node -r tsconfig-paths/register scripts/seeds/books.ts"
   },
   "engines": {
     "node": ">=20.10"

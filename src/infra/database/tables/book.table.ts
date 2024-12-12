@@ -8,4 +8,5 @@ export type TBookTable = TTableBase & {
   imagePath: string;
   price: number;
   discountPrice: number | null;
+  sectionId: string;
 };
