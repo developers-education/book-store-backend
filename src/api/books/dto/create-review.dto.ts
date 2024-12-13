@@ -1,9 +1,9 @@
-import { z } from 'zod';
 import { createZodDto } from '@/lib/zod-dto/dto-helpers';
+import { reviewSchema } from '@/api/books/schemas/review.schema';
 
-const createReviewSchema = z.object({
-  text: z.string().min(1).max(1000).openapi({ description: 'Review text', example: 'Great book!' }),
-  rating: z.number().min(1).max(5).openapi({ description: 'Review rating', example: 5 }),
+const createReviewSchema = reviewSchema.omit({ id: true }).extend({
+  text: reviewSchema.shape.text.min(1).max(1000),
+  rating: reviewSchema.shape.rating.min(1).max(5),
 });
 
 export class CreateReviewDto extends createZodDto(createReviewSchema) {}

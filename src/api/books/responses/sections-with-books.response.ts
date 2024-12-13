@@ -5,7 +5,8 @@ import { bookSchema } from '@/api/books/schemas/book.schema';
 
 const sectionsWithBooksSchema = z.object({
   sections: z.array(
-    sectionSchema.extend({
+    z.object({
+      section: sectionSchema,
       books: z.array(bookSchema),
     }),
   ),

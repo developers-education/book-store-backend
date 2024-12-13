@@ -6,7 +6,7 @@ import { BOOKS_DI_CONSTANTS } from '@/core/books/books.di-constants';
 import { IGetBookWithReviewsCase } from '@/core/books/types/get-full-book-case.interface';
 import { ApiResponses } from '@/infra/api-common/decorators/api-responses.decorator';
 import { BookNotFoundError, UserBookReviewExistsError } from '@/core/books/errors';
-import { BookResponse } from '@/api/books/responses/book.response';
+import { BookWithReviewsResponse } from '@/api/books/responses/book-with-reviews.response';
 import { IdParamDto } from '@/shared/dto/id-param.dto';
 import { BooksResponse } from '@/api/books/responses/books.response';
 import { ICreateReviewCase } from '@/core/books/types/create-review-case.interface';
@@ -31,11 +31,11 @@ export class BooksController {
   @Get('/:id')
   @ApiOperation({ summary: 'Get book by id' })
   @HttpCode(HttpStatus.OK)
-  @ApiResponses(HttpStatus.OK, [BookResponse], { description: 'Book' })
+  @ApiResponses(HttpStatus.OK, [BookWithReviewsResponse], { description: 'Book' })
   @ApiResponses(HttpStatus.BAD_REQUEST, [BookNotFoundError])
-  public async getBook(@Param() idDto: IdParamDto): Promise<BookResponse> {
+  public async getBook(@Param() idDto: IdParamDto): Promise<BookWithReviewsResponse> {
     const result = await this.getBookWithReviewsCase.execute(idDto.id);
-    return BookResponse.create(result);
+    return BookWithReviewsResponse.create(result);
   }
 
   @Get('/recommended')

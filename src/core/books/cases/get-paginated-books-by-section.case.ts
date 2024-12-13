@@ -26,7 +26,7 @@ export class GetPaginatedBooksBySectionCase implements IGetPaginatedBooksBySecti
   ): Promise<TPaginatedBooksResult> {
     this.logger.info('Starting getting paginated books by section.', { sectionId, page, limit });
 
-    const bookIds = await this.booksRepository.getBooksIds();
+    const bookIds = await this.booksRepository.getBooksIds(sectionId);
 
     const offset = (page - 1) * limit;
     const totalPages = Math.ceil(bookIds.length / limit);

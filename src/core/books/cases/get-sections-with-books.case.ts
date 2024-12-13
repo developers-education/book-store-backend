@@ -1,13 +1,8 @@
-import {
-  IBooksRepository,
-  TSectionsWithBooks,
-} from '@/core/books/types/books-repository.interface';
+import { IBooksRepository } from '@/core/books/types/books-repository.interface';
 import {
   IGetSectionsWithBooksCase,
-  TSectionWithBook,
+  TSectionWithBooks,
 } from '@/core/books/types/get-sections-with-books-case.interface';
-import { Book } from '@/core/books/entities/book.entity';
-import { Section } from '@/core/books/entities/section.entity';
 import { Inject, Injectable } from '@nestjs/common';
 import { BOOKS_DI_CONSTANTS } from '@/core/books/books.di-constants';
 import { COMMON_DI_CONSTANTS } from '@/infra/common/common.di-constants';
@@ -24,33 +19,18 @@ export class GetSectionsWithBooksCase implements IGetSectionsWithBooksCase {
     this.logger.setContext(GetSectionsWithBooksCase.name);
   }
 
-  public async execute(booksLimit: number): Promise<TSectionWithBook[]> {
+  public async execute(booksLimit: number): Promise<TSectionWithBooks[]> {
     this.logger.info('Starting getting sections with books.', { booksLimit });
 
     const sectionsWithBooks = await this.booksRepository.getSectionsWithBooks(booksLimit);
 
-    const result: TSectionWithBook[] = this.groupSections(sectionsWithBooks);
+    const result: TSectionWithBooks[] = sectionsWithBooks.map((sectionWithBooks) => ({
+      section: sectionWithBooks.section.toPlain(),
+      books: sectionWithBooks.books.map((book) => book.toPlain()),
+    }));
 
     this.logger.info('Successfully got sections with books.', { result });
 
     return result;
-  }
-
-  private groupSections(sectionsWithBooks: TSectionsWithBooks): TSectionWithBook[] {
-    const map: Map<string, { section: Section; books: Book[] }> = new Map();
-    sectionsWithBooks.forEach((data) => {
-      const { section, book } = data;
-
-      if (!map.has(section.id)) {
-        map.set(section.id, { section, books: [book] });
-      } else {
-        map.get(section.id)!.books.push(book);
-      }
-    });
-
-    return Array.from(map.values()).map((data) => ({
-      ...data.section.toPlain(),
-      books: data.books.map((book) => book.toPlain()),
-    }));
   }
 }

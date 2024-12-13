@@ -11,7 +11,7 @@ export interface ZodDto<TOutput = any, TDef extends ZodTypeDef = ZodTypeDef, TIn
   new (): TOutput;
   isZodDto: true;
   schema: ZodSchema<TOutput, TDef, TInput>;
-  create(input: unknown): TOutput;
+  create(input: TInput): TOutput;
 }
 
 export function createZodDto<TOutput = any, TDef extends ZodTypeDef = ZodTypeDef, TInput = TOutput>(

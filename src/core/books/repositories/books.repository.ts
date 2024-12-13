@@ -11,6 +11,7 @@ import { IDatabase } from '@/infra/database/types/database.interface';
 import { Inject, Injectable } from '@nestjs/common';
 import { DATABASE_DI_CONSTANTS } from '@/infra/database/database.di-constants';
 import { withInternalError } from '@/shared/utils/errors';
+import { User } from '@/core/users/entities/user.entity';
 
 @Injectable()
 export class BooksRepository implements IBooksRepository {
@@ -19,26 +20,32 @@ export class BooksRepository implements IBooksRepository {
     private readonly db: IDatabase,
   ) {}
 
-  public async getSectionsWithBooks(): Promise<TSectionsWithBooks> {
+  public async getSectionsWithBooks(limitBooks?: number): Promise<TSectionsWithBooks> {
     return withInternalError(async () => {
-      const result = await this.db
-        .selectFrom('section')
-        .innerJoin('sectionToBook as stb', 'stb.sectionId', 'section.id')
-        .innerJoin('book', 'book.id', 'stb.bookId')
-        .selectAll(['section', 'book'])
-        .select(['section.name as name', 'book.name as bookName'])
-        .select(['section.id as id', 'book.id as bookId'])
-        .execute();
+      const sectionsRows = await this.db.selectFrom('section').selectAll().execute();
 
-      return result.map((data) => {
-        const book = new Book({
-          ...data,
-          id: data.bookId,
-          name: data.bookName,
-        });
-        const section = new Section(data);
-        return { book, section };
-      });
+      // FIXME Bad practice - too many queries
+      return await Promise.all(
+        sectionsRows.map(async (sectionRow) => {
+          let booksBuilder = this.db
+            .selectFrom('book')
+            .selectAll()
+            .where('sectionId', '=', sectionRow.id);
+
+          if (limitBooks) {
+            booksBuilder = booksBuilder.limit(limitBooks);
+          }
+
+          const booksRows = await booksBuilder.execute();
+
+          return {
+            section: new Section(sectionRow),
+            books: booksRows
+              .filter((bookRow) => bookRow.sectionId === sectionRow.id)
+              .map((row) => new Book(row)),
+          };
+        }),
+      );
     });
   }
 
@@ -54,11 +61,7 @@ export class BooksRepository implements IBooksRepository {
 
   public async getBooksBySection(sectionId: string, options?: TGetBooksOptions): Promise<Book[]> {
     return withInternalError(async () => {
-      let builder = this.db
-        .selectFrom('book')
-        .selectAll()
-        .innerJoin('sectionToBook as stb', 'stb.bookId', 'book.id')
-        .where('stb.sectionId', '=', sectionId);
+      let builder = this.db.selectFrom('book').selectAll().where('sectionId', '=', sectionId);
 
       if (options?.limit) {
         builder = builder.limit(options.limit);
@@ -74,9 +77,15 @@ export class BooksRepository implements IBooksRepository {
     });
   }
 
-  public async getBooksIds(): Promise<string[]> {
+  public async getBooksIds(sectionId?: string): Promise<string[]> {
     return withInternalError(async () => {
-      const result = await this.db.selectFrom('book').select('id').execute();
+      let builder = this.db.selectFrom('book').select('id');
+
+      if (sectionId) {
+        builder = builder.where('sectionId', '=', sectionId);
+      }
+
+      const result = await builder.execute();
       return result.map((data) => data.id);
     });
   }
@@ -94,30 +103,37 @@ export class BooksRepository implements IBooksRepository {
 
   public async getBookWithReviews(bookId: string): Promise<TBookWithReviews | null> {
     return withInternalError(async () => {
-      const result = await this.db
+      const bookRow = await this.db
         .selectFrom('book')
+        .selectAll()
         .where('book.id', '=', bookId)
-        .innerJoin('review', 'review.bookId', 'book.id')
-        .selectAll(['book', 'review'])
-        .select(['book.id as bookId', 'review.id as reviewId'])
-        .execute();
+        .executeTakeFirst();
 
-      if (result.length === 0) {
+      if (!bookRow) {
         return null;
       }
 
-      const book = new Book({ ...result[0], id: result[0].bookId });
-      const reviews: Review[] = result.map(
-        (data) =>
-          new Review({
-            ...data,
-            id: data.reviewId,
-          }),
-      );
+      const reviewsRows = await this.db
+        .selectFrom('review')
+        .where('bookId', '=', bookRow.id)
+        .leftJoin('user', 'user.id', 'review.userId')
+        .selectAll(['review', 'user'])
+        .select(['review.id as id', 'user.id as userId'])
+        .execute();
 
       return {
-        book,
-        reviews,
+        book: new Book(bookRow),
+        reviews: reviewsRows.map((row) => {
+          return {
+            review: new Review(row),
+            user: new User({
+              id: row.userId,
+              login: row.login!,
+              passwordHash: row.passwordHash!,
+              salt: row.salt!,
+            }),
+          };
+        }),
       };
     });
   }

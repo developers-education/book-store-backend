@@ -1,4 +1,4 @@
-import crypto from 'node:crypto';
+import * as crypto from 'node:crypto';
 import { ICryptographyService } from '../types/cryptography-service.interface';
 import { Injectable } from '@nestjs/common';
 

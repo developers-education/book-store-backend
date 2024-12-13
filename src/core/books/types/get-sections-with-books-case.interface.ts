@@ -2,9 +2,10 @@ import { TSectionPlain } from '@/core/books/entities/section.entity';
 import { TBookPlain } from '@/core/books/entities/book.entity';
 
 export interface IGetSectionsWithBooksCase {
-  execute(booksLimit: number): Promise<TSectionWithBook[]>;
+  execute(booksLimit: number): Promise<TSectionWithBooks[]>;
 }
 
-export type TSectionWithBook = TSectionPlain & {
+export type TSectionWithBooks = {
+  section: TSectionPlain;
   books: TBookPlain[];
 };

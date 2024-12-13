@@ -1,9 +1,10 @@
 import { Section } from '@/core/books/entities/section.entity';
 import { Book } from '@/core/books/entities/book.entity';
 import { Review } from '@/core/books/entities/review.entity';
+import { User } from '@/core/users/entities/user.entity';
 
 export interface IBooksRepository {
-  getBooksIds(): Promise<string[]>;
+  getBooksIds(sectionId?: string): Promise<string[]>;
   getBooksByIds(ids: string[]): Promise<Book[]>;
   getBooksBySection(sectionId: string, options?: TGetBooksOptions): Promise<Book[]>;
   getSectionsWithBooks(limitBooks?: number): Promise<TSectionsWithBooks>;
@@ -20,10 +21,13 @@ export type TGetBooksOptions = {
 
 export type TSectionsWithBooks = {
   section: Section;
-  book: Book;
+  books: Book[];
 }[];
 
 export type TBookWithReviews = {
   book: Book;
-  reviews: Review[];
+  reviews: {
+    review: Review;
+    user: User;
+  }[];
 };

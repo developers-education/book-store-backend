@@ -31,7 +31,12 @@ export class GetBookWithReviewsCase implements IGetBookWithReviewsCase {
 
     const book: TBookWithReviews = {
       ...bookWithReviews.book.toPlain(),
-      reviews: bookWithReviews.reviews.map((review) => review.toPlain()),
+      reviews: bookWithReviews.reviews.map((reviewObj) => {
+        return {
+          review: reviewObj.review.toPlain(),
+          user: reviewObj.user.toPlainProfile(),
+        };
+      }),
     };
 
     this.logger.info('Successfully got book with reviews.', { book });
